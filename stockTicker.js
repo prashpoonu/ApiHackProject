@@ -35,7 +35,7 @@ $(function () {
         {
             range: $('.dataDuration').val(),
             interval: 3,
-            AccessKey: 'hf8cQehsukDBW8oWQHvUTPDGYP8RAjns'
+            AccessKey: 'GkIYaHmIBTNnbr_fAsSnhnAhp4FF85tE'
 
         }
         let urlQString = GetQueryString(queryParam);
@@ -46,44 +46,47 @@ $(function () {
                 status: r.status, body: data
             })))
             .then(f => {
-                let stockMktObj = (f.body["Stock price"]);
-                //console.log(stockMktObj.length);
-                let dateData = [];
-                let highValData = [];
-                let lowValData = [];
-                let dataLength = stockMktObj.length
-                for (let i = 0; i < dataLength; i++) 
-                {
-                    dateData.push(stockMktObj[i].date);
-                    highValData.push(stockMktObj[i].high);
-                    lowValData.push(stockMktObj[i].low)
-                    //console.log(stockMktObj[i]);
+                if (f.status == 200) {
+                    let stockMktObj = (f.body["Stock price"]);
+                    let dateData = [];
+                    let highValData = [];
+                    let lowValData = [];
+                    let dataLength = stockMktObj.length
+                    for (let i = 0; i < dataLength; i++) {
+                        dateData.push(stockMktObj[i].date);
+                        highValData.push(stockMktObj[i].high);
+                        lowValData.push(stockMktObj[i].low)
+                        //console.log(stockMktObj[i]);
+                    }
+                    var trace1 = {
+                        type: "scatter",
+                        mode: "lines",
+                        name: `${$('.tickerSearch').val()} High`,
+                        x: dateData,
+                        y: highValData,
+                        line: { color: '#17BECF' }
+                    }
+
+                    var trace2 = {
+                        type: "scatter",
+                        mode: "lines",
+                        name: `${$('.tickerSearch').val()} Low`,
+                        x: dateData,
+                        y: lowValData,
+                        line: { color: '#7F7F7F' }
+                    }
+
+                    var data = [trace1, trace2];
+
+                    var layout = {
+                        title: `Time Series Stock Value Variation Of ${$('.tickerSearch').val()} For a Duration Of ${$('.dataDuration').val()}`,
+                    };
+
+                    Plotly.newPlot('GraphResult', data, layout);
                 }
-                var trace1 = {
-                    type: "scatter",
-                    mode: "lines",
-                    name: 'AAPL High',
-                    x: dateData,
-                    y: highValData,
-                    line: { color: '#17BECF' }
+                else {
+                    $('#GraphResult').html(`Error Occurred : ${f.body.message}`);
                 }
-
-                var trace2 = {
-                    type: "scatter",
-                    mode: "lines",
-                    name: 'AAPL Low',
-                    x: dateData,
-                    y: lowValData,
-                    line: { color: '#7F7F7F' }
-                }
-
-                var data = [trace1, trace2];
-
-                var layout = {
-                    title: 'Basic Time Series',
-                };
-
-                Plotly.newPlot('GraphResult', data, layout);
 
             })
 
@@ -93,22 +96,6 @@ $(function () {
 
     }
 
-    // function ShowTimeSeriesGraph(jsonResult) {
-    //     let receivedJson =  {};
-    //     receivedJson = jsonResult;
-    //     console.log(`Received JSON : ${receivedJson}`);
-    //     let dateData = [];
-    //     let highValData = [];
-    //     let lowValData = [];
-    //     // for(let i=0; i<jsonResult.lenght;i++)
-    //     // {
-    //     //     dateData.push(jsonResult[i].date);
-    //     //     highValData.push(jsonResult[i].high);
-    //     //     lowValData.push(jsonResult[i].low)
-    //     // }
-
-    //     //console.log(`Json Data: ${jsonResult} , DateData:${dateData} , HighData :${highValData} , LowData : ${lowValData} `);
-    // }
     function GetQueryString(parameters) {
         let keys = Object.keys(parameters);
         let queryItems = keys.map(k => `${k}=${parameters[k]}`);
