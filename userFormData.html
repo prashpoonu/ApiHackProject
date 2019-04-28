@@ -16,29 +16,75 @@
 </head>
 
 <body>
-    <form class="userQuery" role="UserInput">
-        Search By Stock ticker : <input type="text" class="tickerSearch"></input>
-        <button class="submitBtn">Submit</button>
-        <select class="dataDuration">
-            <option value="1m">1 month</option>
-            <option value="3m">3 months</option>
-            <option value="1y">1 years</option>
-            <option value="3y">3 years</option>
-            <option value="5y">5 years</option>
-            <option value="10y">10 years</option>
-            <option value="20y">20 years</option>
-        </select>
+    <nav class="row">
+        <button>Home</button>
+        <h1>Stock News and Analysis</h1>    
+    </nav>
 
-    </form>
-    <section role="SearchResult">
-<div class="Result"></div>
-<div id="GraphResult"></div>
-    </section>
-    <script src="https://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
-        integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
-     <script src="stockTicker.js" type="text/javascript"></script> 
-     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>  
+    <main>
+        <form class="userQuery row" role="UserInput">
+            <!-- I added a span here***************************** -->
+            <span>Search by stock ticker:</span> 
+            <input type="text" class="tickerSearch"></input>
+            <button class="submitBtn">Submit</button>
+            <select class="dataDuration">
+                <option value="1m">1 month</option>
+                <option value="3m">3 months</option>
+                <option value="1y">1 years</option>
+                <option value="3y">3 years</option>
+                <option value="5y">5 years</option>
+                <option value="10y">10 years</option>
+                <option value="20y">20 years</option>
+            </select>
+        </form>
+
+        <section role="results-section" class="row results-section">
+            <div role="data-point-labels" class="col">
+                <!-- fill this with possible data points from the API -->
+                <h4 class="data-blank">&nbsp;</h4>
+                <h3 class="data-latest-closing-date">Latest Closing Date:</h3>
+                <h3 class="data-open">Open:</h3>
+                <h3 class="data-high">High:</h3>
+                <h3 class="data-low">Low:</h3>
+                <h3 class="data-close">Close:</h3>
+            </div>
+            <div role="first-ticker-data-display" id="ticker-1" class="col">
+                <!-- fill this with the first ticker info selected -->   
+                <h4 class="data-name">AAPL</h4>
+                <h5 class="data-latest-closing-date"></h5>
+                <h5 class="data-open"></h5>
+                <h5 class="data-high"></h5>
+                <h5 class="data-low"></h5>
+                <h5 class="data-close"></h5>
+            </div>
+            <div role="second-ticker-data-display" id="ticker-2" class="col">
+                <!-- fill this with the second ticker info selected and if it's full already - move that info to the first col -->
+                <h4 class="data-name">IBM</h4>
+                <h5 class="data-latest-closing-date"></h5>
+                <h5 class="data-open"></h5>
+                <h5 class="data-high"></h5>
+                <h5 class="data-low"></h5>
+                <h5 class="data-close"></h5>
+            </div>
+        </section>
+
+
+
+
+
+        
+        <!-- <section role="SearchResult">
+            <div class="Result"></div>
+            <div class="GraphResult"></div>
+        </section> -->
+        
+        
+        <script src="https://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+            integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+        <script src="stockTicker.js" type="text/javascript"></script> 
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>  
+    </main>
 </body>
 
 </html>

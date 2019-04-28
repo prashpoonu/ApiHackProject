@@ -1,3 +1,8 @@
+const STORE = {
+  
+
+};
+
 $(function () {
     function ImplementTickerAutoComplete(searchText) {
         let tickerLst = [{ value: "A", label: "A" },
@@ -102,3 +107,21 @@ $(function () {
         return queryItems.join('&');
     }
 });
+
+
+
+// Audrey's section start
+
+
+
+
+
+
+
+
+
+
+
+
+
+
