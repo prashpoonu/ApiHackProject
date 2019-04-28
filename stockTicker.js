@@ -38,7 +38,7 @@ $(function () {
         {
             range: $('.dataDuration').val(),
             interval: 3,
-            AccessKey: 'GkIYaHmIBTNnbr_fAsSnhnAhp4FF85tE'
+            AccessKey: 'GkIYaHmIBTNnbr_fAsSnhnAhp4FF85tE1'
 
         }
         let urlQString = GetQueryString(queryParam);
@@ -112,7 +112,7 @@ $(function () {
     function DisplayNews() {
         let url = `https://api.unibit.ai/news/latest/${$('.tickerSearch').val()}`;
         let params = {
-            AccessKey: 'GkIYaHmIBTNnbr_fAsSnhnAhp4FF85tE'
+            AccessKey: 'GkIYaHmIBTNnbr_fAsSnhnAhp4FF85tE1'
         }
         let qString = GetQueryString(params)
         url = url + '?' + qString;
