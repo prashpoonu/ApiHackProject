@@ -86,6 +86,7 @@ $(function () {
                     };
                     $('#ResultModal').dialog("open");
                     Plotly.newPlot('GraphResult', data, layout);
+                    DisplayNews();
 
 
                 }
@@ -107,6 +108,46 @@ $(function () {
         width: 1000,
         height: 500
     });
+
+    function DisplayNews() {
+        let url = `https://api.unibit.ai/news/latest/${$('.tickerSearch').val()}`;
+        let params = {
+            AccessKey: 'GkIYaHmIBTNnbr_fAsSnhnAhp4FF85tE'
+        }
+        let qString = GetQueryString(params)
+        url = url + '?' + qString;
+        //console.log(`News api Url : ${url}`);
+        fetch(url)
+            .then(r => r.json().then(data => ({
+                status: r.status, body: data
+            })))
+            .then(jsonData => {
+                if (jsonData.status == 200) {
+                    let newsData = jsonData.body["latest stock news"];
+                    let CntnewsData = newsData.length;
+                    let newsDataView = `<table id="tblnewsView">
+             <tr>
+             <th> Title </th>
+             <th> Publish Date </th>
+             </tr>
+             </table>`;
+                    $('#newsResult').html('');
+                    $('#newsResult').html(`<h2>Latest News Of Selected Stock</h2><br/>`);
+                    $('#newsResult').append(newsDataView);
+                    for (let i = 0; i < CntnewsData; i++) {
+                        $('#tblnewsView').append(`<tr><td>${newsData[i].title}</td>
+                        <td>${newsData[i]["published at"]}</td>
+                        </tr>`)
+                    }
+                }
+                else {
+                    $('#GraphResult').html(`Error Occurred : ${jsonData.body.message}`);
+                }
+            })
+            .catch(err => {
+                $('#GraphResult').html(`Error Occurred : ${err.message}`)
+            })
+    }
 
 
 
