@@ -1,5 +1,8 @@
 $(function () {
-    function ImplementTickerAutoComplete(searchText) {
+    // let data=[];
+    // let trace1 = {};
+    // let trace2 = {};
+    function ImplementTickerAutoComplete() {
         let tickerLst = [{ value: "A", label: "A" },
         { value: "AA", label: "AA" },
         { value: "AAC", label: "AAC" },
@@ -19,14 +22,14 @@ $(function () {
         });
     }
     $('form').on('keyup', '.tickerSearch', function (event) {
-        ImplementTickerAutoComplete($(this).val());
+        ImplementTickerAutoComplete();
     })
     $('form').on('click', 'button', function (evnt) {
         evnt.preventDefault();
         $('.Result').html(`<a href="#">${$('.tickerSearch').val()}</a>`);
     });
     $('.Result').on('click', 'a', function (evt) {
-        evt.preventDefault();
+        //evt.preventDefault();
         GetDataFromUnibitApi();
     });
     function GetDataFromUnibitApi() {
@@ -81,8 +84,10 @@ $(function () {
                     var layout = {
                         title: `Time Series Stock Value Variation Of ${$('.tickerSearch').val()} For a Duration Of ${$('.dataDuration').val()}`,
                     };
-
+                    $('#ResultModal').dialog("open");
                     Plotly.newPlot('GraphResult', data, layout);
+
+
                 }
                 else {
                     $('#GraphResult').html(`Error Occurred : ${f.body.message}`);
@@ -95,6 +100,16 @@ $(function () {
             });
 
     }
+
+    $('#ResultModal').dialog({
+        modal: true,
+        autoOpen: false,
+        width: 1000,
+        height: 500
+    });
+
+
+
 
     function GetQueryString(parameters) {
         let keys = Object.keys(parameters);
