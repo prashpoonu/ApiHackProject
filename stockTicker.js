@@ -14,7 +14,7 @@ const STORE = {
 // let trace1 = {};
 // let trace2 = {};
 
-function ImplementTickerAutoComplete(event) {
+function implementTickerAutoComplete() {
     let tickerList = [{ value: "A", label: "A" },
         { value: "AA", label: "AA" },
         { value: "AAC", label: "AAC" },
@@ -28,13 +28,13 @@ function ImplementTickerAutoComplete(event) {
         { value: "LEN", label: "LEN" },
         { value: "KBH", label: "KBH" },
         { value: "PRU", label: "PRU" }];
-    $(this).autocomplete({
+    $('.tickerSearch').autocomplete({
         source: tickerList
     });
 }
 // Event delegator - called at bottom
 function startTicking() {
-    $('form').on('keyup', '.tickerSearch', event => implementTickerAutoComplete(event));
+    $('form').on('keyup', '.tickerSearch', event => implementTickerAutoComplete());
     $('form').on('click', 'button', function(event) {
         event.preventDefault();
         $('.result').html(`<a href="#">${$('.tickerSearch').val()}</a>`);
@@ -143,9 +143,9 @@ function displayNews() {
                 <th> Publish Date </th>
                 </tr>
                 </table>`;
-            $('#newsResult').html('');
-            $('#newsResult').html(`<h2>Latest News Of Selected Stock</h2><br/>`);
-            $('#newsResult').append(newsDataView);
+            $('#news-result').html('');
+            $('#news-result').append(`<h2>Latest News Of Selected Stock</h2><br/>`);
+            $('#news-result').append(newsDataView);
             for (let i = 0; i < cntNewsData; i++) {
                 $('#tblNewsView').append(`<tr><td>${newsData[i].title}</td>
                 <td>${newsData[i]["published at"]}</td>
@@ -163,5 +163,5 @@ function displayNews() {
 
 // Audrey will have to add more tomorrow for the clicks - I just finished merging it
 
-implementTickerAutoComplete();
+//implementTickerAutoComplete();
 startTicking();
