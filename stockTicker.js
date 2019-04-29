@@ -2,6 +2,7 @@ const STORE = {
     unibitKeyPrashant: 'GkIYaHmIBTNnbr_fAsSnhnAhp4FF85tE', /* cspell: disable-line */
     unibitKeyAudrey: 'oa1yyhplyzggaowa88stunvzislwdnvkqg1oz8qf',
     unibitHistoricalUrl: 'https://api.unibit.ai/historicalstockprice/',
+    unibitNewsUrl: 'https://api.unibit.ai/news/latest/',
     queryParamForGraph: {
         range: $('.dataDuration').val(),
         interval: 3,
@@ -45,13 +46,15 @@ function startTicking() {
 }
 function createApiUrl(queryParam) {
     let queryParams;
+    let baseUrl;
     if (queryParam == 'graph') {
         queryParams = STORE.queryParamForGraph;
+        baseUrl = STORE.unibitHistoricalUrl + $('.tickerSearch').val();
     }
     else if (queryParam == 'news') {
         queryParams = STORE.queryParamForNews;
+        baseUrl = STORE.unibitNewsUrl + $('.tickerSearch').val();
     }
-    let baseUrl = STORE.unibitHistoricalUrl + $('.tickerSearch').val();
     let urlQString = getQueryString(queryParams);
     outputUrl = baseUrl + '?' + urlQString;
     console.log(outputUrl);
@@ -121,17 +124,6 @@ $('#result-modal').dialog({
     width: 1400,
     height: 500
 });
-implementTickerAutoComplete();
-startTicking();
-
-// Audrey's section start
-// 
-
-
-
-
-
-
 function displayNews() {
     let queryParam = 'news';
     const newsUrl = createApiUrl(queryParam);
@@ -144,12 +136,13 @@ function displayNews() {
         if (jsonData.status == 200) {
             let newsData = jsonData.body["latest stock news"];
             let cntNewsData = newsData.length;
-            let newsDataView = `<table id="tblNewsView">
-        <tr>
-        <th> Title </th>
-        <th> Publish Date </th>
-        </tr>
-        </table>`;
+            let newsDataView = 
+                `<table id="tblNewsView">
+                <tr>
+                <th> Title </th>
+                <th> Publish Date </th>
+                </tr>
+                </table>`;
             $('#newsResult').html('');
             $('#newsResult').html(`<h2>Latest News Of Selected Stock</h2><br/>`);
             $('#newsResult').append(newsDataView);
@@ -168,7 +161,7 @@ function displayNews() {
     });
 }
 
+// Audrey will have to add more tomorrow for the clicks - I just finished merging it
 
-
-
-
+implementTickerAutoComplete();
+startTicking();
