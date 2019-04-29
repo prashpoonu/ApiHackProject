@@ -5,6 +5,8 @@ const STORE = {
     queryParamForGraph: {
         range: $('.dataDuration').val(),
         interval: 3,
+        AccessKey: 'GkIYaHmIBTNnbr_fAsSnhnAhp4FF85tE'}, /* cspell: disable-line */
+    queryParamForNews: {
         AccessKey: 'GkIYaHmIBTNnbr_fAsSnhnAhp4FF85tE'} /* cspell: disable-line */
 };
 // let data=[];
@@ -49,9 +51,9 @@ function createApiUrl(queryParam) {
     else if (queryParam == 'news') {
         queryParams = STORE.queryParamForNews;
     }
-    let url = STORE.unibitHistoricalUrl + $('.tickerSearch').val();
+    let baseUrl = STORE.unibitHistoricalUrl + $('.tickerSearch').val();
     let urlQString = getQueryString(queryParams);
-    outputUrl = url + '?' + urlQString;
+    outputUrl = baseUrl + '?' + urlQString;
     console.log(outputUrl);
     return outputUrl;
 }
@@ -89,7 +91,6 @@ function getGraphDataFromUnibitApi() {
                 y: highValData,
                 line: { color: '#17BECF' }
             };
-
             var trace2 = {
                 type: "scatter",
                 mode: "lines",
@@ -98,25 +99,28 @@ function getGraphDataFromUnibitApi() {
                 y: lowValData,
                 line: { color: '#7F7F7F' }
             };
-
             var data = [trace1, trace2];
-
             var layout = {
                 title: `Time Series Stock Value Variation Of ${$('.tickerSearch').val()} For a Duration Of ${$('.dataDuration').val()}`,
             };
-
+            $('#result-modal').dialog("open");
             Plotly.newPlot('graph-result', data, layout);
+            displayNews();
         }
         else {
             $('#graph-result').html(`Error Occurred : ${f.body.message}`);
         }
     })
-
     .catch(err => {
         $('#graph-result').html(`Error Occurred : ${err.message}`);
     });
 }
-
+$('#result-modal').dialog({
+    modal: true,
+    autoOpen: false,
+    width: 1400,
+    height: 500
+});
 implementTickerAutoComplete();
 startTicking();
 
@@ -126,49 +130,42 @@ startTicking();
 
 
 
-$('#result-modal').dialog({
-    modal: true,
-    autoOpen: false,
-    width: 1400,
-    height: 500
-});
+
 
 function displayNews() {
-    let url = `https://api.unibit.ai/news/latest/${$('.tickerSearch').val()}`;
-    let params = {AccessKey: 'GkIYaHmIBTNnbr_fAsSnhnAhp4FF85tE'}; /* cspell: disable-line */
-    let qString = GetQueryString(params);
-    url = url + '?' + qString;
+    let queryParam = 'news';
+    const newsUrl = createApiUrl(queryParam);
     //console.log(`News api Url : ${url}`);
-    fetch(url)
-        .then(r => r.json().then(data => ({
-            status: r.status, body: data
-        })))
-        .then(jsonData => {
-            if (jsonData.status == 200) {
-                let newsData = jsonData.body["latest stock news"];
-                let cntNewsData = newsData.length;
-                let newsDataView = `<table id="tblNewsView">
-            <tr>
-            <th> Title </th>
-            <th> Publish Date </th>
-            </tr>
-            </table>`;
-                $('#newsResult').html('');
-                $('#newsResult').html(`<h2>Latest News Of Selected Stock</h2><br/>`);
-                $('#newsResult').append(newsDataView);
-                for (let i = 0; i < cntNewsData; i++) {
-                    $('#tblNewsView').append(`<tr><td>${newsData[i].title}</td>
-                    <td>${newsData[i]["published at"]}</td>
-                    </tr>`);
-                }
+    fetch(newsUrl)
+    .then(r => r.json().then(data => ({
+        status: r.status, body: data
+    })))
+    .then(jsonData => {
+        if (jsonData.status == 200) {
+            let newsData = jsonData.body["latest stock news"];
+            let cntNewsData = newsData.length;
+            let newsDataView = `<table id="tblNewsView">
+        <tr>
+        <th> Title </th>
+        <th> Publish Date </th>
+        </tr>
+        </table>`;
+            $('#newsResult').html('');
+            $('#newsResult').html(`<h2>Latest News Of Selected Stock</h2><br/>`);
+            $('#newsResult').append(newsDataView);
+            for (let i = 0; i < cntNewsData; i++) {
+                $('#tblNewsView').append(`<tr><td>${newsData[i].title}</td>
+                <td>${newsData[i]["published at"]}</td>
+                </tr>`);
             }
-            else {
-                $('#graph-result').html(`Error Occurred : ${jsonData.body.message}`);
-            }
-        })
-        .catch(err => {
-            $('#graph-result').html(`Error Occurred : ${err.message}`);
-        });
+        }
+        else {
+            $('#graph-result').html(`Error Occurred : ${jsonData.body.message}`);
+        }
+    })
+    .catch(err => {
+        $('#graph-result').html(`Error Occurred : ${err.message}`);
+    });
 }
 
 
