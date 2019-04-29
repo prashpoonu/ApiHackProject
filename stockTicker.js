@@ -5,40 +5,38 @@ const STORE = {
     queryParamForGraph: {
         range: $('.dataDuration').val(),
         interval: 3,
-        AccessKey: 'GkIYaHmIBTNnbr_fAsSnhnAhp4FF85tE'}, /* cspell: disable-line */
-    
+        AccessKey: 'GkIYaHmIBTNnbr_fAsSnhnAhp4FF85tE'} /* cspell: disable-line */
 };
+// let data=[];
+// let trace1 = {};
+// let trace2 = {};
 
-function implementTickerAutoComplete(searchText) {
+function ImplementTickerAutoComplete(event) {
     let tickerList = [{ value: "A", label: "A" },
-    { value: "AA", label: "AA" },
-    { value: "AAC", label: "AAC" },
-    { value: "AAPL", label: "AAPL" },
-    { value: "GOOG", label: "GOOG" },
-    { value: "MSFT", label: "MSFT" },
-    { value: "CTBK", label: "CTBK" },
-    { value: "JPM", label: "JPM" },
-    { value: "BAC", label: "BAC" },
-    { value: "TSLA", label: "TSLA" },
-    { value: "LEN", label: "LEN" },
-    { value: "KBH", label: "KBH" },
-    { value: "PRU", label: "PRU" }
-    ];
-    $('.tickerSearch').autocomplete({
+        { value: "AA", label: "AA" },
+        { value: "AAC", label: "AAC" },
+        { value: "AAPL", label: "AAPL" },
+        { value: "GOOG", label: "GOOG" },
+        { value: "MSFT", label: "MSFT" },
+        { value: "CTBK", label: "CTBK" },
+        { value: "JPM", label: "JPM" },
+        { value: "BAC", label: "BAC" },
+        { value: "TSLA", label: "TSLA" },
+        { value: "LEN", label: "LEN" },
+        { value: "KBH", label: "KBH" },
+        { value: "PRU", label: "PRU" }];
+    $(this).autocomplete({
         source: tickerList
     });
 }
 // Event delegator - called at bottom
 function startTicking() {
-    $('form').on('keyup', '.tickerSearch', function(event) {
-        implementTickerAutoComplete($(this).val());
-        }
-    );
-    $('form').on('click', 'button', function (event) {
+    $('form').on('keyup', '.tickerSearch', event => implementTickerAutoComplete(event));
+    $('form').on('click', 'button', function(event) {
         event.preventDefault();
         $('.result').html(`<a href="#">${$('.tickerSearch').val()}</a>`);
     });
-    $('.result').on('click', 'a', function (event) {
+    $('.result').on('click', 'a', function(event) {
         event.preventDefault();
         getGraphDataFromUnibitApi();
     });
@@ -47,6 +45,9 @@ function createApiUrl(queryParam) {
     let queryParams;
     if (queryParam == 'graph') {
         queryParams = STORE.queryParamForGraph;
+    }
+    else if (queryParam == 'news') {
+        queryParams = STORE.queryParamForNews;
     }
     let url = STORE.unibitHistoricalUrl + $('.tickerSearch').val();
     let urlQString = getQueryString(queryParams);
@@ -68,6 +69,7 @@ function getGraphDataFromUnibitApi() {
     })))
     .then(f => {
         if (f.status == 200) {
+            // is there a way to break this down into another function?
             let stockMktObj = (f.body["Stock price"]);
             let dateData = [];
             let highValData = [];
@@ -103,16 +105,15 @@ function getGraphDataFromUnibitApi() {
                 title: `Time Series Stock Value Variation Of ${$('.tickerSearch').val()} For a Duration Of ${$('.dataDuration').val()}`,
             };
 
-            Plotly.newPlot('GraphResult', data, layout); /* cspell: disable-line */
+            Plotly.newPlot('graph-result', data, layout);
         }
         else {
-            $('#GraphResult').html(`Error Occurred : ${f.body.message}`);
+            $('#graph-result').html(`Error Occurred : ${f.body.message}`);
         }
-
     })
 
     .catch(err => {
-        $('#GraphResult').html(`Error Occurred : ${err.message}`);
+        $('#graph-result').html(`Error Occurred : ${err.message}`);
     });
 }
 
@@ -125,10 +126,50 @@ startTicking();
 
 
 
+$('#result-modal').dialog({
+    modal: true,
+    autoOpen: false,
+    width: 1400,
+    height: 500
+});
 
-
-
-
+function displayNews() {
+    let url = `https://api.unibit.ai/news/latest/${$('.tickerSearch').val()}`;
+    let params = {AccessKey: 'GkIYaHmIBTNnbr_fAsSnhnAhp4FF85tE'}; /* cspell: disable-line */
+    let qString = GetQueryString(params);
+    url = url + '?' + qString;
+    //console.log(`News api Url : ${url}`);
+    fetch(url)
+        .then(r => r.json().then(data => ({
+            status: r.status, body: data
+        })))
+        .then(jsonData => {
+            if (jsonData.status == 200) {
+                let newsData = jsonData.body["latest stock news"];
+                let cntNewsData = newsData.length;
+                let newsDataView = `<table id="tblNewsView">
+            <tr>
+            <th> Title </th>
+            <th> Publish Date </th>
+            </tr>
+            </table>`;
+                $('#newsResult').html('');
+                $('#newsResult').html(`<h2>Latest News Of Selected Stock</h2><br/>`);
+                $('#newsResult').append(newsDataView);
+                for (let i = 0; i < cntNewsData; i++) {
+                    $('#tblNewsView').append(`<tr><td>${newsData[i].title}</td>
+                    <td>${newsData[i]["published at"]}</td>
+                    </tr>`);
+                }
+            }
+            else {
+                $('#graph-result').html(`Error Occurred : ${jsonData.body.message}`);
+            }
+        })
+        .catch(err => {
+            $('#graph-result').html(`Error Occurred : ${err.message}`);
+        });
+}
 
 
 
