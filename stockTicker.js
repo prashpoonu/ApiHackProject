@@ -38,7 +38,7 @@ $(function () {
         {
             range: $('.dataDuration').val(),
             interval: 3,
-            AccessKey: 'GkIYaHmIBTNnbr_fAsSnhnAhp4FF85tE1'
+            AccessKey: 'GkIYaHmIBTNnbr_fAsSnhnAhp4FF85tE'
 
         }
         let urlQString = GetQueryString(queryParam);
@@ -105,14 +105,14 @@ $(function () {
     $('#ResultModal').dialog({
         modal: true,
         autoOpen: false,
-        width: 1000,
+        width: 1400,
         height: 500
     });
 
     function DisplayNews() {
         let url = `https://api.unibit.ai/news/latest/${$('.tickerSearch').val()}`;
         let params = {
-            AccessKey: 'GkIYaHmIBTNnbr_fAsSnhnAhp4FF85tE1'
+            AccessKey: 'GkIYaHmIBTNnbr_fAsSnhnAhp4FF85tE'
         }
         let qString = GetQueryString(params)
         url = url + '?' + qString;
