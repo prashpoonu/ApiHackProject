@@ -8,7 +8,12 @@ const STORE = {
         interval: 3,
         AccessKey: 'GkIYaHmIBTNnbr_fAsSnhnAhp4FF85tE'}, /* cspell: disable-line */
     queryParamForNews: {
-        AccessKey: 'GkIYaHmIBTNnbr_fAsSnhnAhp4FF85tE'} /* cspell: disable-line */
+        AccessKey: 'GkIYaHmIBTNnbr_fAsSnhnAhp4FF85tE'}, /* cspell: disable-line */
+    queryParamForColumns: {
+        range: $('.dataDuration').val(),
+        interval: 1,
+        AccessKey: 'GkIYaHmIBTNnbr_fAsSnhnAhp4FF85tE'}, /* cspell: disable-line */
+    tickerCounter: 0
 };
 // let data=[];
 // let trace1 = {};
@@ -35,8 +40,13 @@ function ImplementTickerAutoComplete(event) {
 // Event delegator - called at bottom
 function startTicking() {
     $('form').on('keyup', '.tickerSearch', event => implementTickerAutoComplete(event));
-    $('form').on('click', 'button', function(event) {
+    $('form').submit(function(event) {
         event.preventDefault();
+        let tickerInputVal = $('.tickerSearch').val();
+        if (tickerInputVal == "") {
+            return true;
+        }
+        dataColSwitcher(tickerInputVal);
         $('.result').html(`<a href="#">${$('.tickerSearch').val()}</a>`);
     });
     $('.result').on('click', 'a', function(event) {
@@ -54,6 +64,10 @@ function createApiUrl(queryParam) {
     else if (queryParam == 'news') {
         queryParams = STORE.queryParamForNews;
         baseUrl = STORE.unibitNewsUrl + $('.tickerSearch').val();
+    }
+    else if (queryParam == 'columns') {
+        queryParams = STORE.queryParamForColumns;
+        baseUrl = STORE.unibitHistoricalUrl + $('.tickerSearch').val();
     }
     let urlQString = getQueryString(queryParams);
     outputUrl = baseUrl + '?' + urlQString;
@@ -162,6 +176,32 @@ function displayNews() {
 }
 
 // Audrey will have to add more tomorrow for the clicks - I just finished merging it
+function dataColSwitcher(tickerInputVal) {
+    let tickerCount = STORE.tickerCounter++;
+    let queryParam = 'columns';
+    const columnsUrl = createApiUrl(queryParam);
+    fetch(columnsUrl)
+    .then(response => response.json().then(responseJson => ({
+        status: r.status, body: responseJson
+    })))
+    .then(jsonData => {
+        const firstDayObj = jsonData.body["Stock price"][0];
+        if (jsonData.status == 200) {
+            if (tickerCount === 1) {
+                $('.ticker-1').html(`<h3 class="data-name ticker-name result">${tickerInputVal}</h3>
+                <h3 class="data-latest-closing-date">${firstDayObj.date}</h3>
+                <h3 class="data-open">${firstDayObj.open}</h3>
+                <h3 class="data-high">${firstDayObj.high}</h3>
+                <h3 class="data-low">${firstDayObj.low}</h3>
+                <h3 class="data-close">${firstDayObj.close}</h3>`);
+            }
+            // add tickerCount === 2 and tickerCount >= 3
+        }
+    });
+}
+
+
+
 
 implementTickerAutoComplete();
 startTicking();
