@@ -8,13 +8,19 @@ const STORE = {
         interval: 3,
         AccessKey: 'GkIYaHmIBTNnbr_fAsSnhnAhp4FF85tE'}, /* cspell: disable-line */
     queryParamForNews: {
-        AccessKey: 'GkIYaHmIBTNnbr_fAsSnhnAhp4FF85tE'} /* cspell: disable-line */
+        AccessKey: 'GkIYaHmIBTNnbr_fAsSnhnAhp4FF85tE'}, /* cspell: disable-line */
+    queryParamForColumns: {
+        range: $('.dataDuration').val(),
+        interval: 1,
+        AccessKey: 'GkIYaHmIBTNnbr_fAsSnhnAhp4FF85tE'}, /* cspell: disable-line */
+    tickerCounter: 0
 };
 // let data=[];
 // let trace1 = {};
 // let trace2 = {};
 
-function implementTickerAutoComplete() {
+
+function ImplementTickerAutoComplete() {
     let tickerList = [{ value: "A", label: "A" },
         { value: "AA", label: "AA" },
         { value: "AAC", label: "AAC" },
@@ -34,11 +40,15 @@ function implementTickerAutoComplete() {
 }
 // Event delegator - called at bottom
 function startTicking() {
-    $('form').on('keyup', '.tickerSearch', event => implementTickerAutoComplete());
-    $('form').on('click', 'button', function(event) {
+    $('form').on('keyup', '.tickerSearch', event => ImplementTickerAutoComplete(event));
+    $('form').submit(function(event) {
+
         event.preventDefault();
-        $('.result').html(`<a href="#">${$('.tickerSearch').val()}</a>`);
-    });
+        let tickerInputVal = $('.tickerSearch').val();
+        console.log(tickerInputVal);
+        if (tickerInputVal) {
+        dataColSwitcher(tickerInputVal);
+    }});
     $('.result').on('click', 'a', function(event) {
         event.preventDefault();
         getGraphDataFromUnibitApi();
@@ -54,6 +64,10 @@ function createApiUrl(queryParam) {
     else if (queryParam == 'news') {
         queryParams = STORE.queryParamForNews;
         baseUrl = STORE.unibitNewsUrl + $('.tickerSearch').val();
+    }
+    else if (queryParam == 'columns') {
+        queryParams = STORE.queryParamForColumns;
+        baseUrl = STORE.unibitHistoricalUrl + $('.tickerSearch').val();
     }
     let urlQString = getQueryString(queryParams);
     outputUrl = baseUrl + '?' + urlQString;
@@ -74,7 +88,6 @@ function getGraphDataFromUnibitApi() {
     })))
     .then(f => {
         if (f.status == 200) {
-            // is there a way to break this down into another function?
             let stockMktObj = (f.body["Stock price"]);
             let dateData = [];
             let highValData = [];
@@ -162,6 +175,62 @@ function displayNews() {
 }
 
 // Audrey will have to add more tomorrow for the clicks - I just finished merging it
+function dataColSwitcher(tickerInputVal) {
+    console.log("dataColSwitcher ran!!");
+    STORE.tickerCounter++;
+    let tickerCount = STORE.tickerCounter;
+    console.log(tickerCount);
+    console.log(STORE.tickerCounter);
+    let queryParam = 'columns';
+    const columnsUrl = createApiUrl(queryParam);
+    fetch(columnsUrl)
+    .then(response => response.json().then(responseJson => ({
+        status: response.status, data: responseJson
+    })))
+    .then(res => {
+        if (res.status == 200) {
+            let firstDayObj = res.data["Stock price"]["0"];
+            console.log(firstDayObj);
+            if (tickerCount == 1) {
+                console.log('tickerCount must be 1?');
+                $('#ticker-1').html(`<a href="#" class="text-center"><h3 class="data-name ticker-name result">${tickerInputVal}</h3></a>
+                <h3 class="data-latest-closing-date">${firstDayObj.date}</h3>
+                <h3 class="data-open">${firstDayObj.open}</h3>
+                <h3 class="data-high">${firstDayObj.high}</h3>
+                <h3 class="data-low">${firstDayObj.low}</h3>
+                <h3 class="data-close">${firstDayObj.close}</h3>`);
+            }
+            else if (tickerCount == 2) {
+                console.log('tickerCount must be 2?');
+                $('#ticker-2').html(`<a href="#" class="text-center"><h3 class="data-name ticker-name result">${tickerInputVal}</h3></a>
+                <h3 class="data-latest-closing-date">${firstDayObj.date}</h3>
+                <h3 class="data-open">${firstDayObj.open}</h3>
+                <h3 class="data-high">${firstDayObj.high}</h3>
+                <h3 class="data-low">${firstDayObj.low}</h3>
+                <h3 class="data-close">${firstDayObj.close}</h3>`);
+            }
+            else if (tickerCount >= 3) {
+                console.log('tickerCount must be 3+?');
+                const tickSaver =  $('#ticker-2').html();
+                $('#ticker-1').html(tickSaver);
+                $('#ticker-2').html(`<a href="#" class="text-center"><h3 class="data-name ticker-name result">${tickerInputVal}</h3></a>
+                <h3 class="data-latest-closing-date">${firstDayObj.date}</h3>
+                <h3 class="data-open">${firstDayObj.open}</h3>
+                <h3 class="data-high">${firstDayObj.high}</h3>
+                <h3 class="data-low">${firstDayObj.low}</h3>
+                <h3 class="data-close">${firstDayObj.close}</h3>`);
+            }
+            else {
+                throw console.error("You must have messed up the views!!!");
+            }
+        }
+    });
+}
+
+
+
+
 
 //implementTickerAutoComplete();
+
 startTicking();
