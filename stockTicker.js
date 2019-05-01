@@ -19,6 +19,7 @@ const STORE = {
 // let trace1 = {};
 // let trace2 = {};
 
+
 function ImplementTickerAutoComplete() {
     let tickerList = [{ value: "A", label: "A" },
         { value: "AA", label: "AA" },
@@ -41,6 +42,7 @@ function ImplementTickerAutoComplete() {
 function startTicking() {
     $('form').on('keyup', '.tickerSearch', event => ImplementTickerAutoComplete(event));
     $('form').submit(function(event) {
+
         event.preventDefault();
         let tickerInputVal = $('.tickerSearch').val();
         console.log(tickerInputVal);
@@ -154,9 +156,9 @@ function displayNews() {
                 <th> Publish Date </th>
                 </tr>
                 </table>`;
-            $('#newsResult').html('');
-            $('#newsResult').html(`<h2>Latest News Of Selected Stock</h2><br/>`);
-            $('#newsResult').append(newsDataView);
+            $('#news-result').html('');
+            $('#news-result').append(`<h2>Latest News Of Selected Stock</h2><br/>`);
+            $('#news-result').append(newsDataView);
             for (let i = 0; i < cntNewsData; i++) {
                 $('#tblNewsView').append(`<tr><td>${newsData[i].title}</td>
                 <td>${newsData[i]["published at"]}</td>
@@ -228,5 +230,7 @@ function dataColSwitcher(tickerInputVal) {
 
 
 
-ImplementTickerAutoComplete();
+
+//implementTickerAutoComplete();
+
 startTicking();
