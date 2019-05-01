@@ -19,7 +19,7 @@ const STORE = {
 // let trace1 = {};
 // let trace2 = {};
 
-function ImplementTickerAutoComplete(event) {
+function ImplementTickerAutoComplete() {
     let tickerList = [{ value: "A", label: "A" },
         { value: "AA", label: "AA" },
         { value: "AAC", label: "AAC" },
@@ -33,22 +33,20 @@ function ImplementTickerAutoComplete(event) {
         { value: "LEN", label: "LEN" },
         { value: "KBH", label: "KBH" },
         { value: "PRU", label: "PRU" }];
-    $(this).autocomplete({
+    $('.tickerSearch').autocomplete({
         source: tickerList
     });
 }
 // Event delegator - called at bottom
 function startTicking() {
-    $('form').on('keyup', '.tickerSearch', event => implementTickerAutoComplete(event));
+    $('form').on('keyup', '.tickerSearch', event => ImplementTickerAutoComplete(event));
     $('form').submit(function(event) {
         event.preventDefault();
         let tickerInputVal = $('.tickerSearch').val();
-        if (tickerInputVal == "") {
-            return true;
-        }
+        console.log(tickerInputVal);
+        if (tickerInputVal) {
         dataColSwitcher(tickerInputVal);
-        $('.result').html(`<a href="#">${$('.tickerSearch').val()}</a>`);
-    });
+    }});
     $('.result').on('click', 'a', function(event) {
         event.preventDefault();
         getGraphDataFromUnibitApi();
@@ -88,7 +86,6 @@ function getGraphDataFromUnibitApi() {
     })))
     .then(f => {
         if (f.status == 200) {
-            // is there a way to break this down into another function?
             let stockMktObj = (f.body["Stock price"]);
             let dateData = [];
             let highValData = [];
@@ -177,25 +174,53 @@ function displayNews() {
 
 // Audrey will have to add more tomorrow for the clicks - I just finished merging it
 function dataColSwitcher(tickerInputVal) {
-    let tickerCount = STORE.tickerCounter++;
+    console.log("dataColSwitcher ran!!");
+    STORE.tickerCounter++;
+    let tickerCount = STORE.tickerCounter;
+    console.log(tickerCount);
+    console.log(STORE.tickerCounter);
     let queryParam = 'columns';
     const columnsUrl = createApiUrl(queryParam);
     fetch(columnsUrl)
     .then(response => response.json().then(responseJson => ({
-        status: r.status, body: responseJson
+        status: response.status, data: responseJson
     })))
-    .then(jsonData => {
-        const firstDayObj = jsonData.body["Stock price"][0];
-        if (jsonData.status == 200) {
-            if (tickerCount === 1) {
-                $('.ticker-1').html(`<h3 class="data-name ticker-name result">${tickerInputVal}</h3>
+    .then(res => {
+        if (res.status == 200) {
+            let firstDayObj = res.data["Stock price"]["0"];
+            console.log(firstDayObj);
+            if (tickerCount == 1) {
+                console.log('tickerCount must be 1?');
+                $('#ticker-1').html(`<a href="#" class="text-center"><h3 class="data-name ticker-name result">${tickerInputVal}</h3></a>
                 <h3 class="data-latest-closing-date">${firstDayObj.date}</h3>
                 <h3 class="data-open">${firstDayObj.open}</h3>
                 <h3 class="data-high">${firstDayObj.high}</h3>
                 <h3 class="data-low">${firstDayObj.low}</h3>
                 <h3 class="data-close">${firstDayObj.close}</h3>`);
             }
-            // add tickerCount === 2 and tickerCount >= 3
+            else if (tickerCount == 2) {
+                console.log('tickerCount must be 2?');
+                $('#ticker-2').html(`<a href="#" class="text-center"><h3 class="data-name ticker-name result">${tickerInputVal}</h3></a>
+                <h3 class="data-latest-closing-date">${firstDayObj.date}</h3>
+                <h3 class="data-open">${firstDayObj.open}</h3>
+                <h3 class="data-high">${firstDayObj.high}</h3>
+                <h3 class="data-low">${firstDayObj.low}</h3>
+                <h3 class="data-close">${firstDayObj.close}</h3>`);
+            }
+            else if (tickerCount >= 3) {
+                console.log('tickerCount must be 3+?');
+                const tickSaver =  $('#ticker-2').html();
+                $('#ticker-1').html(tickSaver);
+                $('#ticker-2').html(`<a href="#" class="text-center"><h3 class="data-name ticker-name result">${tickerInputVal}</h3></a>
+                <h3 class="data-latest-closing-date">${firstDayObj.date}</h3>
+                <h3 class="data-open">${firstDayObj.open}</h3>
+                <h3 class="data-high">${firstDayObj.high}</h3>
+                <h3 class="data-low">${firstDayObj.low}</h3>
+                <h3 class="data-close">${firstDayObj.close}</h3>`);
+            }
+            else {
+                throw console.error("You must have messed up the views!!!");
+            }
         }
     });
 }
@@ -203,5 +228,5 @@ function dataColSwitcher(tickerInputVal) {
 
 
 
-implementTickerAutoComplete();
+ImplementTickerAutoComplete();
 startTicking();
