@@ -13,7 +13,8 @@ const STORE = {
         range: $('.dataDuration').val(),
         interval: 1,
         AccessKey: 'GkIYaHmIBTNnbr_fAsSnhnAhp4FF85tE'}, /* cspell: disable-line */
-    tickerCounter: 0
+    tickerCounter: 0,
+    tickerObjStorage: []
 };
 // let data=[];
 // let trace1 = {};
@@ -49,16 +50,20 @@ function startTicking() {
     $('form').on('keyup', '.tickerSearch', event => ImplementTickerAutoComplete(event));
     $('form').submit(function(event) {
         event.preventDefault();
-        let tickerInputVal = $('.tickerSearch').val();
-        console.log(tickerInputVal);
-        if (tickerInputVal) {
-        dataColSwitcher(tickerInputVal);
+        STORE.tickerInputVal = $('.tickerSearch').val();
+        console.log(STORE.tickerInputVal);
+        if (STORE.tickerInputVal) {
+        dataColSwitcher(STORE.tickerInputVal);
         $('.tickerSearch').text('');
     }});
     $('.anchor-tag').on('click', function(event) {
         // event.preventDefault();
         getGraphDataFromUnibitApi();
     });
+}
+// a function that will iterate over the tickerObjStorage and search for the res.data["Meta Data"].ticker == $(a tag).children('.result').text();
+function stockObjIter() {
+
 }
 function createApiUrl(queryParam) {
     let queryParams;
@@ -86,6 +91,7 @@ function getQueryString(parameters) {
     return queryItems.join('&');
 }
 function getGraphDataFromUnibitApi() {
+    console.log('getGraphDataFromUnibitApi ran!');
     // let queryParam = 'graph';
     // const graphUrl = createApiUrl(queryParam);
     // fetch(graphUrl)
@@ -175,6 +181,7 @@ function getGraphDataFromUnibitApi() {
                   "adj_close" : 29.5,
                   "volume" : 3660500
                 } ];
+                console.log(stockMktObj);
             // (f.body["Stock price"]);
             let dateData = [];
             let highValData = [];
@@ -184,12 +191,12 @@ function getGraphDataFromUnibitApi() {
                 dateData.push(stockMktObj[i].date);
                 highValData.push(stockMktObj[i].high);
                 lowValData.push(stockMktObj[i].low);
-                //console.log(stockMktObj[i]);
+                console.log(stockMktObj[i]);
             }
             var trace1 = {
                 type: "scatter",
                 mode: "lines",
-                name: `${$('.tickerSearch').val()} High`,
+                name: `${r.body["Meta Data"].ticker} High`,
                 x: dateData,
                 y: highValData,
                 line: { color: '#17BECF' }
@@ -197,14 +204,14 @@ function getGraphDataFromUnibitApi() {
             var trace2 = {
                 type: "scatter",
                 mode: "lines",
-                name: `${$('.tickerSearch').val()} Low`,
+                name: `${r.body["Meta Data"].ticker} Low`,
                 x: dateData,
                 y: lowValData,
                 line: { color: '#7F7F7F' }
             };
             var data = [trace1, trace2];
             var layout = {
-                title: `Time Series Stock Value Variation Of ${$('.tickerSearch').val()} For a Duration Of ${$('.dataDuration').val()}`,
+                title: `Time Series Stock Value Variation Of ${r.body["Meta Data"].ticker}`
             };
             $('#result-modal').dialog("open");
             Plotly.newPlot('graph-result', data, layout);
@@ -280,6 +287,7 @@ function dataColSwitcher(tickerInputVal) {
                 "adj_close" : 29.66,
                 "volume" : 2375490
               };
+            STORE.tickerObjStorage.push(res.data);
             // res.data["Stock price"]["0"];
             console.log(firstDayObj);
             if (tickerCount == 1) {
