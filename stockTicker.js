@@ -40,17 +40,23 @@ function ImplementTickerAutoComplete() {
 }
 // Event delegator - called at bottom
 function startTicking() {
+    $('#result-modal').dialog({
+        modal: true,
+        autoOpen: false,
+        width: 1400,
+        height: 500
+    });
     $('form').on('keyup', '.tickerSearch', event => ImplementTickerAutoComplete(event));
     $('form').submit(function(event) {
-
         event.preventDefault();
         let tickerInputVal = $('.tickerSearch').val();
         console.log(tickerInputVal);
         if (tickerInputVal) {
         dataColSwitcher(tickerInputVal);
+        $('.tickerSearch').text('');
     }});
-    $('.result').on('click', 'a', function(event) {
-        event.preventDefault();
+    $('.anchor-tag').on('click', function(event) {
+        // event.preventDefault();
         getGraphDataFromUnibitApi();
     });
 }
@@ -80,15 +86,96 @@ function getQueryString(parameters) {
     return queryItems.join('&');
 }
 function getGraphDataFromUnibitApi() {
-    let queryParam = 'graph';
-    const graphUrl = createApiUrl(queryParam);
-    fetch(graphUrl)
-    .then(r => r.json().then(data => ({
-        status: r.status, body: data
-    })))
-    .then(f => {
-        if (f.status == 200) {
-            let stockMktObj = (f.body["Stock price"]);
+    // let queryParam = 'graph';
+    // const graphUrl = createApiUrl(queryParam);
+    // fetch(graphUrl)
+    // .then(r => r.json().then(data => ({
+    //     status: r.status, body: data
+    // })))
+    // .then(f => {
+    //     if (f.status == 200) {
+            let stockMktObj = [ {
+                  "date" : "2019-04-08",
+                  "open" : 29.55,
+                  "high" : 29.73,
+                  "low" : 29.32,
+                  "close" : 29.66,
+                  "adj_close" : 29.66,
+                  "volume" : 2375490
+                }, {
+                  "date" : "2019-04-03",
+                  "open" : 28.45,
+                  "high" : 28.87,
+                  "low" : 28.31,
+                  "close" : 28.69,
+                  "adj_close" : 28.69,
+                  "volume" : 4675900
+                }, {
+                  "date" : "2019-03-29",
+                  "open" : 28.28,
+                  "high" : 28.8,
+                  "low" : 28.01,
+                  "close" : 28.16,
+                  "adj_close" : 28.16,
+                  "volume" : 3382500
+                }, {
+                  "date" : "2019-03-26",
+                  "open" : 28.14,
+                  "high" : 27.54,
+                  "low" : 27.27,
+                  "close" : 28.5,
+                  "adj_close" : 27.54,
+                  "volume" : 4275996
+                }, {
+                  "date" : "2019-03-21",
+                  "open" : 28.54,
+                  "high" : 29.53,
+                  "low" : 28.5,
+                  "close" : 29.41,
+                  "adj_close" : 29.41,
+                  "volume" : 3186214
+                }, {
+                  "date" : "2019-03-18",
+                  "open" : 28.0,
+                  "high" : 28.86,
+                  "low" : 27.927,
+                  "close" : 28.64,
+                  "adj_close" : 28.64,
+                  "volume" : 3522200
+                }, {
+                  "date" : "2019-03-13",
+                  "open" : 28.62,
+                  "high" : 29.32,
+                  "low" : 28.56,
+                  "close" : 28.98,
+                  "adj_close" : 28.98,
+                  "volume" : 3670400
+                }, {
+                  "date" : "2019-03-08",
+                  "open" : 26.93,
+                  "high" : 27.16,
+                  "low" : 26.51,
+                  "close" : 26.82,
+                  "adj_close" : 26.82,
+                  "volume" : 2864000
+                }, {
+                  "date" : "2019-03-05",
+                  "open" : 29.07,
+                  "high" : 29.31,
+                  "low" : 28.76,
+                  "close" : 29.2,
+                  "adj_close" : 29.2,
+                  "volume" : 1890800
+                }, {
+                  "date" : "2019-02-28",
+                  "open" : 31.02,
+                  "high" : 31.02,
+                  "low" : 29.33,
+                  "close" : 29.5,
+                  "adj_close" : 29.5,
+                  "volume" : 3660500
+                } ];
+            // (f.body["Stock price"]);
             let dateData = [];
             let highValData = [];
             let lowValData = [];
@@ -121,58 +208,53 @@ function getGraphDataFromUnibitApi() {
             };
             $('#result-modal').dialog("open");
             Plotly.newPlot('graph-result', data, layout);
-            displayNews();
-        }
-        else {
-            $('#graph-result').html(`Error Occurred : ${f.body.message}`);
-        }
-    })
-    .catch(err => {
-        $('#graph-result').html(`Error Occurred : ${err.message}`);
-    });
+            // displayNews();
+        // }
+    //     else {
+    //         $('#graph-result').html(`Error Occurred : ${f.body.message}`);
+    //     }
+    // })
+    // .catch(err => {
+    //     $('#graph-result').html(`Error Occurred : ${err.message}`);
+    // });
 }
-$('#result-modal').dialog({
-    modal: true,
-    autoOpen: false,
-    width: 1400,
-    height: 500
-});
-function displayNews() {
-    let queryParam = 'news';
-    const newsUrl = createApiUrl(queryParam);
-    //console.log(`News api Url : ${url}`);
-    fetch(newsUrl)
-    .then(r => r.json().then(data => ({
-        status: r.status, body: data
-    })))
-    .then(jsonData => {
-        if (jsonData.status == 200) {
-            let newsData = jsonData.body["latest stock news"];
-            let cntNewsData = newsData.length;
-            let newsDataView = 
-                `<table id="tblNewsView">
-                <tr>
-                <th> Title </th>
-                <th> Publish Date </th>
-                </tr>
-                </table>`;
-            $('#news-result').html('');
-            $('#news-result').append(`<h2>Latest News Of Selected Stock</h2><br/>`);
-            $('#news-result').append(newsDataView);
-            for (let i = 0; i < cntNewsData; i++) {
-                $('#tblNewsView').append(`<tr><td>${newsData[i].title}</td>
-                <td>${newsData[i]["published at"]}</td>
-                </tr>`);
-            }
-        }
-        else {
-            $('#graph-result').html(`Error Occurred : ${jsonData.body.message}`);
-        }
-    })
-    .catch(err => {
-        $('#graph-result').html(`Error Occurred : ${err.message}`);
-    });
-}
+
+// function displayNews() {
+//     let queryParam = 'news';
+//     const newsUrl = createApiUrl(queryParam);
+//     //console.log(`News api Url : ${url}`);
+//     fetch(newsUrl)
+//     .then(r => r.json().then(data => ({
+//         status: r.status, body: data
+//     })))
+//     .then(jsonData => {
+//         if (jsonData.status == 200) {
+//             let newsData = jsonData.body["latest stock news"];
+//             let cntNewsData = newsData.length;
+//             let newsDataView = 
+//                 `<table id="tblNewsView">
+//                 <tr>
+//                 <th> Title </th>
+//                 <th> Publish Date </th>
+//                 </tr>
+//                 </table>`;
+//             $('#news-result').html('');
+//             $('#news-result').append(`<h2>Latest News Of Selected Stock</h2><br/>`);
+//             $('#news-result').append(newsDataView);
+//             for (let i = 0; i < cntNewsData; i++) {
+//                 $('#tblNewsView').append(`<tr><td>${newsData[i].title}</td>
+//                 <td>${newsData[i]["published at"]}</td>
+//                 </tr>`);
+//             }
+//         }
+//         else {
+//             $('#graph-result').html(`Error Occurred : ${jsonData.body.message}`);
+//         }
+//     })
+//     .catch(err => {
+//         $('#graph-result').html(`Error Occurred : ${err.message}`);
+//     });
+// }
 
 // Audrey will have to add more tomorrow for the clicks - I just finished merging it
 function dataColSwitcher(tickerInputVal) {
@@ -181,19 +263,28 @@ function dataColSwitcher(tickerInputVal) {
     let tickerCount = STORE.tickerCounter;
     console.log(tickerCount);
     console.log(STORE.tickerCounter);
-    let queryParam = 'columns';
-    const columnsUrl = createApiUrl(queryParam);
-    fetch(columnsUrl)
-    .then(response => response.json().then(responseJson => ({
-        status: response.status, data: responseJson
-    })))
-    .then(res => {
-        if (res.status == 200) {
-            let firstDayObj = res.data["Stock price"]["0"];
+    // let queryParam = 'columns';
+    // const columnsUrl = createApiUrl(queryParam);
+    // fetch(columnsUrl)
+    // .then(response => response.json().then(responseJson => ({
+    //     status: response.status, data: responseJson
+    // })))
+    // .then(res => {
+    //     if (res.status == 200) {
+            let firstDayObj = {
+                "date" : "2019-04-08",
+                "open" : 29.55,
+                "high" : 29.73,
+                "low" : 29.32,
+                "close" : 29.66,
+                "adj_close" : 29.66,
+                "volume" : 2375490
+              };
+            // res.data["Stock price"]["0"];
             console.log(firstDayObj);
             if (tickerCount == 1) {
                 console.log('tickerCount must be 1?');
-                $('#ticker-1').html(`<a href="#" class="text-center"><h3 class="data-name ticker-name result">${tickerInputVal}</h3></a>
+                $('#ticker-1').html(`<a href="#" class="text-center anchor-tag"><h3 class="data-name ticker-name result">${tickerInputVal}</h3></a>
                 <h3 class="data-latest-closing-date">${firstDayObj.date}</h3>
                 <h3 class="data-open">${firstDayObj.open}</h3>
                 <h3 class="data-high">${firstDayObj.high}</h3>
@@ -202,7 +293,7 @@ function dataColSwitcher(tickerInputVal) {
             }
             else if (tickerCount == 2) {
                 console.log('tickerCount must be 2?');
-                $('#ticker-2').html(`<a href="#" class="text-center"><h3 class="data-name ticker-name result">${tickerInputVal}</h3></a>
+                $('#ticker-2').html(`<a href="#" class="text-center anchor-tag"><h3 class="data-name ticker-name result">${tickerInputVal}</h3></a>
                 <h3 class="data-latest-closing-date">${firstDayObj.date}</h3>
                 <h3 class="data-open">${firstDayObj.open}</h3>
                 <h3 class="data-high">${firstDayObj.high}</h3>
@@ -213,7 +304,7 @@ function dataColSwitcher(tickerInputVal) {
                 console.log('tickerCount must be 3+?');
                 const tickSaver =  $('#ticker-2').html();
                 $('#ticker-1').html(tickSaver);
-                $('#ticker-2').html(`<a href="#" class="text-center"><h3 class="data-name ticker-name result">${tickerInputVal}</h3></a>
+                $('#ticker-2').html(`<a href="#" class="text-center anchor-tag"><h3 class="data-name ticker-name result">${tickerInputVal}</h3></a>
                 <h3 class="data-latest-closing-date">${firstDayObj.date}</h3>
                 <h3 class="data-open">${firstDayObj.open}</h3>
                 <h3 class="data-high">${firstDayObj.high}</h3>
@@ -223,8 +314,8 @@ function dataColSwitcher(tickerInputVal) {
             else {
                 throw console.error("You must have messed up the views!!!");
             }
-        }
-    });
+    //     }
+    // });
 }
 
 
