@@ -196,6 +196,7 @@ function dataColSwitcher(tickerInputVal) {
     .then(res => {
         if (res.status == 200) {
             let firstDayObj = res.data["Stock price"][0];
+
             console.log(firstDayObj);
             if (tickerCount == 1) {
                 console.log('tickerCount must be 1?');
