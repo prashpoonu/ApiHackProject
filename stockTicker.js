@@ -1,18 +1,20 @@
 const STORE = {
-    unibitKeyPrashant: 'GkIYaHmIBTNnbr_fAsSnhnAhp4FF85tE', /* cspell: disable-line */
+    unibitKeyPrashant: 'DcpwsFKJIS7b7q2fDhqUZbL61Vje1Xso', /* cspell: disable-line */
     unibitKeyAudrey: 'oa1yyhplyzggaowa88stunvzislwdnvkqg1oz8qf',
-    unibitHistoricalUrl: 'https://api.unibit.ai/historicalstockprice/',
-    unibitNewsUrl: 'https://api.unibit.ai/news/latest/',
+    unibitHistoricalUrl: 'https://api.unibit.ai/api/historicalstockprice/',
+    unibitNewsUrl: 'https://api.unibit.ai/api/news/classification/',
     queryParamForGraph: {
         range: $('.dataDuration').val(),
         interval: 3,
-        AccessKey: 'GkIYaHmIBTNnbr_fAsSnhnAhp4FF85tE'}, /* cspell: disable-line */
+        AccessKey: 'DcpwsFKJIS7b7q2fDhqUZbL61Vje1Xso'}, /* cspell: disable-line */
     queryParamForNews: {
-        AccessKey: 'GkIYaHmIBTNnbr_fAsSnhnAhp4FF85tE'}, /* cspell: disable-line */
+        AccessKey: 'DcpwsFKJIS7b7q2fDhqUZbL61Vje1Xso', /* cspell: disable-line */
+        interval : '1w'
+    },
     queryParamForColumns: {
         range: $('.dataDuration').val(),
-        interval: 1,
-        AccessKey: 'GkIYaHmIBTNnbr_fAsSnhnAhp4FF85tE'}, /* cspell: disable-line */
+        interval: 3,
+        AccessKey: 'DcpwsFKJIS7b7q2fDhqUZbL61Vje1Xso'}, /* cspell: disable-line */
     tickerCounter: 0
 };
 // let data=[];
@@ -49,25 +51,28 @@ function startTicking() {
         if (tickerInputVal) {
         dataColSwitcher(tickerInputVal);
     }});
-    $('.result').on('click', 'a', function(event) {
-        event.preventDefault();
-        getGraphDataFromUnibitApi();
+
+    $('#stock-details').on('click', 'h3', function(event) {
+        //event.preventDefault();
+        console.log(`Currently clicked ticker is : ${$(this).text()}`);
+        let currentTicker  = $(this).text();
+        getGraphDataFromUnibitApi(currentTicker);
     });
 }
-function createApiUrl(queryParam) {
+function createApiUrl(queryParam,tickerName) {
     let queryParams;
     let baseUrl;
     if (queryParam == 'graph') {
         queryParams = STORE.queryParamForGraph;
-        baseUrl = STORE.unibitHistoricalUrl + $('.tickerSearch').val();
+        baseUrl = STORE.unibitHistoricalUrl + tickerName;
     }
     else if (queryParam == 'news') {
         queryParams = STORE.queryParamForNews;
-        baseUrl = STORE.unibitNewsUrl + $('.tickerSearch').val();
+        baseUrl = STORE.unibitNewsUrl + tickerName;
     }
     else if (queryParam == 'columns') {
         queryParams = STORE.queryParamForColumns;
-        baseUrl = STORE.unibitHistoricalUrl + $('.tickerSearch').val();
+        baseUrl = STORE.unibitHistoricalUrl + tickerName;
     }
     let urlQString = getQueryString(queryParams);
     outputUrl = baseUrl + '?' + urlQString;
@@ -79,9 +84,9 @@ function getQueryString(parameters) {
     let queryItems = keys.map(k => `${k}=${parameters[k]}`);
     return queryItems.join('&');
 }
-function getGraphDataFromUnibitApi() {
+function getGraphDataFromUnibitApi(tickerName) {
     let queryParam = 'graph';
-    const graphUrl = createApiUrl(queryParam);
+    const graphUrl = createApiUrl(queryParam,tickerName);
     fetch(graphUrl)
     .then(r => r.json().then(data => ({
         status: r.status, body: data
@@ -102,7 +107,7 @@ function getGraphDataFromUnibitApi() {
             var trace1 = {
                 type: "scatter",
                 mode: "lines",
-                name: `${$('.tickerSearch').val()} High`,
+                name: `${tickerName} High`,
                 x: dateData,
                 y: highValData,
                 line: { color: '#17BECF' }
@@ -110,18 +115,18 @@ function getGraphDataFromUnibitApi() {
             var trace2 = {
                 type: "scatter",
                 mode: "lines",
-                name: `${$('.tickerSearch').val()} Low`,
+                name: `${tickerName} Low`,
                 x: dateData,
                 y: lowValData,
                 line: { color: '#7F7F7F' }
             };
             var data = [trace1, trace2];
             var layout = {
-                title: `Time Series Stock Value Variation Of ${$('.tickerSearch').val()} For a Duration Of ${$('.dataDuration').val()}`,
+                title: `Time Series Stock Value Variation Of ${tickerName} For a Duration Of ${$('.dataDuration').val()}`,
             };
             $('#result-modal').dialog("open");
             Plotly.newPlot('graph-result', data, layout);
-            displayNews();
+            displayNews(tickerName);
         }
         else {
             $('#graph-result').html(`Error Occurred : ${f.body.message}`);
@@ -134,12 +139,13 @@ function getGraphDataFromUnibitApi() {
 $('#result-modal').dialog({
     modal: true,
     autoOpen: false,
+    "resize":"auto",
     width: 1400,
     height: 500
 });
-function displayNews() {
+function displayNews(tickerName) {
     let queryParam = 'news';
-    const newsUrl = createApiUrl(queryParam);
+    const newsUrl = createApiUrl(queryParam,tickerName);
     //console.log(`News api Url : ${url}`);
     fetch(newsUrl)
     .then(r => r.json().then(data => ({
@@ -147,7 +153,7 @@ function displayNews() {
     })))
     .then(jsonData => {
         if (jsonData.status == 200) {
-            let newsData = jsonData.body["latest stock news"];
+            let newsData = jsonData.body["Stock News"];
             let cntNewsData = newsData.length;
             let newsDataView = 
                 `<table id="tblNewsView">
@@ -182,14 +188,14 @@ function dataColSwitcher(tickerInputVal) {
     console.log(tickerCount);
     console.log(STORE.tickerCounter);
     let queryParam = 'columns';
-    const columnsUrl = createApiUrl(queryParam);
+    const columnsUrl = createApiUrl(queryParam,tickerInputVal);
     fetch(columnsUrl)
     .then(response => response.json().then(responseJson => ({
         status: response.status, data: responseJson
     })))
     .then(res => {
         if (res.status == 200) {
-            let firstDayObj = res.data["Stock price"]["0"];
+            let firstDayObj = res.data["Stock price"][0];
             console.log(firstDayObj);
             if (tickerCount == 1) {
                 console.log('tickerCount must be 1?');
