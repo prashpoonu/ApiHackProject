@@ -2,15 +2,14 @@ const STORE = {
     unibitKeyPrashant: 'DcpwsFKJIS7b7q2fDhqUZbL61Vje1Xso', /* cspell: disable-line */
     unibitKeyAudrey: 'oa1yyhplyzggaowa88stunvzislwdnvkqg1oz8qf',
     unibitHistoricalUrl: 'https://api.unibit.ai/api/historicalstockprice/',
-    unibitNewsUrl: 'https://api.unibit.ai/api/news/classification/',
+    unibitNewsUrl: 'https://api.unibit.ai/api/news/latest/',
     queryParamForGraph: {
         range: $('.dataDuration').val(),
         interval: 3,
         AccessKey: 'DcpwsFKJIS7b7q2fDhqUZbL61Vje1Xso'}, /* cspell: disable-line */
     queryParamForNews: {
         AccessKey: 'DcpwsFKJIS7b7q2fDhqUZbL61Vje1Xso', /* cspell: disable-line */
-        interval : '1w'
-    },
+        },
     queryParamForColumns: {
         range: $('.dataDuration').val(),
         interval: 3,
@@ -126,7 +125,7 @@ function getGraphDataFromUnibitApi(tickerName) {
             };
             $('#result-modal').dialog("open");
             Plotly.newPlot('graph-result', data, layout);
-            displayNews(tickerName);
+            //displayNews(tickerName);
         }
         else {
             $('#graph-result').html(`Error Occurred : ${f.body.message}`);
@@ -153,7 +152,7 @@ function displayNews(tickerName) {
     })))
     .then(jsonData => {
         if (jsonData.status == 200) {
-            let newsData = jsonData.body["Stock News"];
+            let newsData = jsonData.body["latest stock news"];
             let cntNewsData = newsData.length;
             let newsDataView = 
                 `<table id="tblNewsView">
