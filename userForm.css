@@ -17,6 +17,11 @@ nav {
   align-items: center;
   width: 100%;
 }
+nav a {
+  /* position: relative; */
+  /* width: 100%;
+  height: 100%; */
+}
 h1 {
   margin: auto;
   font-size: 2.1em;

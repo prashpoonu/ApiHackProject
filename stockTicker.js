@@ -56,6 +56,10 @@ function startTicking() {
         console.log(`Currently clicked ticker is : ${$(this).text()}`);
         let currentTicker  = $(this).text();
         getGraphDataFromUnibitApi(currentTicker);
+        $('#news-button').on('click', function(event) {
+            $('#news-button').hide();
+            displayNews(currentTicker);
+        });
     });
 }
 function createApiUrl(queryParam,tickerName) {
@@ -125,7 +129,7 @@ function getGraphDataFromUnibitApi(tickerName) {
             };
             $('#result-modal').dialog("open");
             Plotly.newPlot('graph-result', data, layout);
-            //displayNews(tickerName);
+            $('#news-button').show();
         }
         else {
             $('#graph-result').html(`Error Occurred : ${f.body.message}`);
@@ -151,7 +155,11 @@ function displayNews(tickerName) {
         status: r.status, body: data
     })))
     .then(jsonData => {
-        if (jsonData.status == 200) {
+        if (jsonData.status == 404 || jsonData.status == 403 || jsonData.status == 402 || jsonData.status == 401 || jsonData.status == 400) {
+            // console.log(jsonData.body.message);
+            throw new Error("An error");
+        }
+        else if (jsonData.status == 200) {
             let newsData = jsonData.body["latest stock news"];
             let cntNewsData = newsData.length;
             let newsDataView = 
@@ -170,12 +178,9 @@ function displayNews(tickerName) {
                 </tr>`);
             }
         }
-        else {
-            $('#graph-result').html(`Error Occurred : ${jsonData.body.message}`);
-        }
     })
     .catch(err => {
-        $('#graph-result').html(`Error Occurred : ${err.message}`);
+        $('#news-result').html(`Error Occurred : ${err.message}`);
     });
 }
 
