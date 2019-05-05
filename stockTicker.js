@@ -47,6 +47,7 @@ function startTicking() {
         event.preventDefault();
         let tickerInputVal = $('.tickerSearch').val();
         console.log(tickerInputVal);
+        $('.tickerSearch').val('');
         if (tickerInputVal) {
         dataColSwitcher(tickerInputVal);
     }});
@@ -204,32 +205,32 @@ function dataColSwitcher(tickerInputVal) {
             console.log(firstDayObj);
             if (tickerCount == 1) {
                 console.log('tickerCount must be 1?');
-                $('#ticker-1').html(`<a href="#" class="text-center"><h3 class="data-name ticker-name result">${tickerInputVal}</h3></a>
+                $('#ticker-1').html(`<div class="ticker-1"><a href="#" class="text-center"><h3 class="data-name result">${tickerInputVal}</h3></a>
                 <h3 class="data-latest-closing-date">${firstDayObj.date}</h3>
                 <h3 class="data-open">${firstDayObj.open}</h3>
                 <h3 class="data-high">${firstDayObj.high}</h3>
                 <h3 class="data-low">${firstDayObj.low}</h3>
-                <h3 class="data-close">${firstDayObj.close}</h3>`);
+                <h3 class="data-close">${firstDayObj.close}</h3></div>`);
             }
             else if (tickerCount == 2) {
                 console.log('tickerCount must be 2?');
-                $('#ticker-2').html(`<a href="#" class="text-center"><h3 class="data-name ticker-name result">${tickerInputVal}</h3></a>
+                $('#ticker-2').html(`<div class="ticker-2"><a href="#" class="text-center"><h3 class="data-name result">${tickerInputVal}</h3></a>
                 <h3 class="data-latest-closing-date">${firstDayObj.date}</h3>
                 <h3 class="data-open">${firstDayObj.open}</h3>
                 <h3 class="data-high">${firstDayObj.high}</h3>
                 <h3 class="data-low">${firstDayObj.low}</h3>
-                <h3 class="data-close">${firstDayObj.close}</h3>`);
+                <h3 class="data-close">${firstDayObj.close}</h3></div>`);
             }
             else if (tickerCount >= 3) {
                 console.log('tickerCount must be 3+?');
                 const tickSaver =  $('#ticker-2').html();
                 $('#ticker-1').html(tickSaver);
-                $('#ticker-2').html(`<a href="#" class="text-center"><h3 class="data-name ticker-name result">${tickerInputVal}</h3></a>
+                $('#ticker-2').html(`<div class="ticker-2"><a href="#" class="text-center"><h3 class="data-name result">${tickerInputVal}</h3></a>
                 <h3 class="data-latest-closing-date">${firstDayObj.date}</h3>
                 <h3 class="data-open">${firstDayObj.open}</h3>
                 <h3 class="data-high">${firstDayObj.high}</h3>
                 <h3 class="data-low">${firstDayObj.low}</h3>
-                <h3 class="data-close">${firstDayObj.close}</h3>`);
+                <h3 class="data-close">${firstDayObj.close}</h3></div>`);
             }
             else {
                 throw console.error("You must have messed up the views!!!");

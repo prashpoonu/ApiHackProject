@@ -1,14 +1,11 @@
 * {
   box-sizing: border-box;
-  font-family: 'Source Sans Pro', sans-serif, 'Raleway', sans-serif;
-}
-html, body {
-  width: 100%;
+  font-family: 'Source Sans Pro', 'Raleway', sans-serif;
   margin: 0;
   padding: 0;
 }
 body {
-  margin: 0 auto;
+  width: 100%;
 }
 .row, .col {
   display: flex;
@@ -39,45 +36,77 @@ h2 {
   width: auto;
   font-size: .5em;
 }
+h3, h4 {
+  font-size: 2.5vw !important;
+  height: 16.66% !important;
+  min-height: 30px;
+  white-space: nowrap;
+}
 h3 {
-  margin: 3% auto;
-  font-family: 'Raleway:300', sans-serif;
+  /* margin: 3% auto !important; */
+  text-align: left;
+  padding-left: 5%;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 300;
 }
 h4 {
-  margin: 2% .5% 2% auto;
+  /* margin: 2% .5% 2% auto; */
   /* font-size: 1.5em; */
-  font-family: 'Raleway:700', sans-serif;
+  text-align: right;
+  vertical-align: middle;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 700;
 }
 .ticker-name {
   font-weight: bold;
   font-size: 20pt;
 }
 main {
-  height: 100%;
-  width: auto;
-  min-width: 60%;
-  max-width: 80%;
-  margin: 15vh auto auto auto;
+  height: 40vh;
+  width: 75%;
+  padding: .5%;
+  margin: 10vh auto auto auto !important;
   border: 1pt solid gray;
+  font-size: 2.5vw !important;
 }
 form {
   margin: 2% auto;
   padding: .5%;
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
   justify-content: center;
-  align-items: center;
+  align-items: baseline;
+  height: 16.66%;
 }
-.results-section {
-  padding: .5% 2%; 
+/* .results-section {
+  min-height: 80%;
+} */
+div[id^="ticker-"] { 
+  max-width: 33.33%; 
 }
-.results-section div {
-
+div[class^="ticker-"] {
+  margin: 0 1%;
+  color: black;
+  background-color: white;
+  box-shadow: 0 0 16px 0 rgb(185, 185, 185);
+  border: 1px solid hsla( 0 , 0% , 100% , 0 );
 }
 .text-end {
   text-align: end;
 }
 .text-center {
   text-align: center;
+}
+a {
+  
+}
+a h3 {
+  padding-left: .5%;
+  font-size: .9em !important;
+}
+.tickerSearch {
+  max-width: 100px;
+  width: 100%;
+  margin: 0 1%;
 }
 
 
@@ -129,18 +158,19 @@ form {
   display: none;
 }
 @media only screen and (max-width: 600px) {
-  form.row {
+  /* form.row {
     max-width: 378px;
-  }
-  main {
+  } */
+  main, nav {
     min-width: 320px;
-    width: auto;
+    /* width: auto; */
   }
+  /*
   .results-section {
     width: auto;
-  }
+  } */
 }
-@media only screen and (max-width: 400px) {
+@media only screen and (max-width: 500px) {
   h1 {
     font-size: 1.3em;
   }
