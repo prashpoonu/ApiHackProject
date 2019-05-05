@@ -50,7 +50,7 @@ function startTicking() {
         if (tickerInputVal) {
         dataColSwitcher(tickerInputVal);
     }});
-
+    // $('#refresh-page').on("click", event => window.location.reload());
     $('#stock-details').on('click', 'h3', function(event) {
         //event.preventDefault();
         console.log(`Currently clicked ticker is : ${$(this).text()}`);
