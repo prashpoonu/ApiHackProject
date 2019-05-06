@@ -15,14 +15,26 @@ body {
   flex-direction: column;
 }
 nav {
-  position: absolute;
+  position: relative;
   top: 0;
   align-items: center;
   justify-content: center;
-  height: 10vh;
-  background-image: url("http://localhost:8080/Stock%20banner%20bg.jpg");
+  box-shadow: 1px 3px 7px rgba(0,0,0,.16);
+  /* background-image: url("http://localhost:8080/Stock%20banner%20bg.jpg"); */
+  
+}
+nav::after {
+  content: "";
+  background: url(http://localhost:8080/Stock%20banner%20bg.jpg);
   background-repeat: no-repeat;
-  background-size: 100% 10vh;
+  background-size: 100% 100%;
+  opacity: 0.8;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;   
 }
 h1 {
   width: auto;
@@ -66,8 +78,8 @@ h5 {
 main {
   width: 75%;
   padding: .5%;
-  margin: 10vh auto auto auto !important;
-  border: 1pt solid gray;
+  margin: 2vh auto auto;
+  /* border: 1pt solid gray; */
   /* font-size: 2.5vw !important; */
 }
 form {
@@ -184,6 +196,9 @@ button {
 @media only screen and (max-width: 500px) {
   h1 {
     font-size: 1.3em;
+  }
+  main {
+    margin-top: 7.5vh;
   }
 }
 
