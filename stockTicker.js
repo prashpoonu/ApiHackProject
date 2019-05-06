@@ -125,10 +125,11 @@ function getGraphDataFromUnibitApi(tickerName) {
             };
             var data = [trace1, trace2];
             var layout = {
-                title: `Time Series Stock Value Variation Of ${tickerName} For a Duration Of ${$('.dataDuration').val()}`,
+                font:{size:10}
             };
             $('#result-modal').dialog("open");
-            Plotly.newPlot('graph-result', data, layout);
+            $('.ui-dialog-title').text(`Time Series Stock Value Variation Of ${tickerName} For a Duration Of ${$('.dataDuration').val()}`);
+            Plotly.newPlot('graph-result', data, layout,{responsive:true});
             $('#news-button').show();
         }
         else {
@@ -142,10 +143,10 @@ function getGraphDataFromUnibitApi(tickerName) {
 $('#result-modal').dialog({
     modal: true,
     autoOpen: false,
-    "resize":"auto",
-    width: 1400,
-    height: 500
-});
+    width: $(window).width() * 0.9,
+    height: $(window).height() * 0.9,
+    position:'center'
+    });
 function displayNews(tickerName) {
     let queryParam = 'news';
     const newsUrl = createApiUrl(queryParam,tickerName);
@@ -237,6 +238,15 @@ function dataColSwitcher(tickerInputVal) {
         }
     });
 }
+
+$(window).resize(function () {
+    
+        $("#result-modal").dialog("option", "width", $(window).width() * 0.9);
+        $("#result-modal").dialog("option", "height", $(window).height() * 0.9);
+        $("#result-modal").dialog("option", "position", "center");
+    
+});
+
 
 
 
