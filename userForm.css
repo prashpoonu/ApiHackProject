@@ -37,15 +37,17 @@ h2 {
   font-size: .5em;
 }
 h3, h4 {
-  font-size: 2.5vw !important;
+  font-size: 1.5vw !important;
   height: 16.66% !important;
   min-height: 30px;
+  max-height: 150px;
   white-space: nowrap;
 }
 h3 {
   /* margin: 3% auto !important; */
   text-align: left;
-  padding-left: 5%;
+  padding: 0 15% 0 5%;
+  /* margin: 0 100% 0 0; */
   font-family: 'Raleway', sans-serif;
   font-weight: 300;
 }
@@ -57,30 +59,32 @@ h4 {
   font-family: 'Raleway', sans-serif;
   font-weight: 700;
 }
-.ticker-name {
-  font-weight: bold;
-  font-size: 20pt;
+h5 {
+  white-space: nowrap;
+  align-self: center;
 }
 main {
-  height: 40vh;
   width: 75%;
   padding: .5%;
   margin: 10vh auto auto auto !important;
   border: 1pt solid gray;
-  font-size: 2.5vw !important;
+  /* font-size: 2.5vw !important; */
 }
 form {
-  margin: 2% auto;
-  padding: .5%;
+  padding: 0;
+  margin: 0;
   /* flex-wrap: wrap; */
   justify-content: center;
-  align-items: baseline;
-  height: 16.66%;
+  align-content: center;
+  align-items: stretch;
+  height: 3.5vh;
 }
-/* .results-section {
-  min-height: 80%;
-} */
+.results-section {
+  padding: 2%;
+}
 div[id^="ticker-"] { 
+  width: auto;
+  margin: 0 .5%;
   max-width: 33.33%; 
 }
 div[class^="ticker-"] {
@@ -96,17 +100,24 @@ div[class^="ticker-"] {
 .text-center {
   text-align: center;
 }
-a {
-  
-}
+/* a:link, a:visited {
+  text-decoration: none;  
+} */
+/* a:hover {
+  text
+} */
 a h3 {
-  padding-left: .5%;
+  padding-left: .5% !important;
   font-size: .9em !important;
 }
 .tickerSearch {
   max-width: 100px;
   width: 100%;
-  margin: 0 1%;
+  margin: 0 .5%;
+}
+button {
+  margin: 0 1% 0 .5%;
+  font-size: .8em;
 }
 
 
