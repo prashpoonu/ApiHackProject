@@ -50,11 +50,18 @@ function startTicking() {
         let tickerInputVal = $('.tickerSearch').val();
         console.log(tickerInputVal);
         if (tickerInputVal) {
+<<<<<<< HEAD
             dataColSwitcher(tickerInputVal);
         }
     });
 
     $('#stock-details').on('click', 'h3', function (event) {
+=======
+        dataColSwitcher(tickerInputVal);
+    }});
+    // $('#refresh-page').on("click", event => window.location.reload());
+    $('#stock-details').on('click', 'h3', function(event) {
+>>>>>>> 1c3bd9eb7f74b4f811522e0ed9c1f8292020d521
         //event.preventDefault();
         console.log(`Currently clicked ticker is : ${$(this).text()}`);
         let currentTicker = $(this).text();
