@@ -12,20 +12,23 @@
     <title>Stock News and Analysis</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,700|Source+Sans+Pro:700" rel="stylesheet">
     <link rel="stylesheet" href="userForm.css" type="text/css">
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" type="text/css">
 </head>
 
-<body>
+<body class="col">
     <nav class="row">
-            <button type="button" onclick="window.location.reload();">Refresh Page</button>
-            <h1>Stock News and Analysis</h1>
+        <img src="http://localhost:8080/Stock%20banner%20bg.jpg" alt="Stock News and Analysis' banner picture of stocks and arrows">
+        <input type="image" src="http://localhost:8080/refresh1.png" id="refresh-button" class="hvr-glow" onclick="window.location.reload();"></input>
+        <h1>Stock News and Analysis</h1>
     </nav>
 
-    <main>
+    <main class="col">
         <form class="userQuery row" role="UserInput">
             <!-- I added a span here***************************** -->
-            <span>Search by stock ticker:</span>
+            <h5>Search by stock ticker:</h5>
             <input type="text" class="tickerSearch"></input>
             <button class="submitBtn">Submit</button>
             <select class="dataDuration">
@@ -44,7 +47,7 @@
             <div role="data-point-labels" class="col">
                 <!-- fill this with possible data points from the API -->
                 <h4 class="data-blank">&nbsp;</h4>
-                <h4 class="data-latest-closing-date text-end">Latest Closing Date:</h4>
+                <h4 class="data-latest-closing-date">Latest Closing Date:</h4>
                 <h4 class="data-open">Open:</h4>
                 <h4 class="data-high">High:</h4>
                 <h4 class="data-low">Low:</h4>
@@ -55,10 +58,12 @@
             </div>
             <div role="second-ticker-data-display" id="ticker-2" class="col">
             </div>
+            <div role="filler-for-the-future" class="col">
+            </div>
 
         </section>
 
-        <section role="search-result-modal" class="row">
+        <section role="search-result-modal" id="search-result-modal" class="row">
             <div id="result-modal" title="Stock Value Analysis Result" class="col">
                 <div id="graph-result" class="row"></div>
                 <button id="news-button">Show News</button>

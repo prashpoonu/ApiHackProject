@@ -1,202 +1,11 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* * {
+* {
   box-sizing: border-box;
-}
-html, body {
-  width: 100%;
+  font-family: 'Source Sans Pro', 'Raleway', sans-serif;
   margin: 0;
   padding: 0;
-}
+} 
 body {
-  margin: 0 auto;
+  width: 100%;
 }
 .row, .col {
   display: flex;
@@ -206,59 +15,117 @@ body {
   flex-direction: column;
 }
 nav {
-  position: absolute;
+  position: fixed;
   top: 0;
-  left: auto;
-  right: auto;
-  align-items: center;
+  z-index: 999; 
   justify-content: center;
-  height: 10vh;
-  background-image: url("http://localhost:8080/Stock%20banner%20bg.jpg");
-  background-repeat: no-repeat;
-  background-position: top;
-  background-size: 100% 10vh;
-  
+  align-items: center;
+  /* width: 100%;
+  height: auto; */
+  /* align-items: center;
+  justify-content: center; */
+  box-shadow: 1px 3px 7px rgba(0,0,0,.16);
+  /* background-image: url("http://localhost:8080/Stock%20banner%20bg.jpg");  */
+}
+nav img {
+  position: fixed;
+  /* top: 0;
+  left: 0; */
+  width: 100%;
+  height: 80px;
+  z-index: -1;
+}
+main {
+  margin-top: 100px;
+  /* width: 75%;
+  padding: .5%;
+  margin: 2vh auto auto; */
+  border: 1pt solid gray;
+  /* font-size: 2.5vw !important; */
+}
+#refresh-button {
+  border: none;
+  border-radius: 36px;
+  height: 30px;
+  width: 45px;
+  margin-right: 5px; 
 }
 h1 {
-  width: auto;
+  /* width: auto;
   margin-left: 2%;
   font-size: 2.1em;
-  white-space: nowrap;
+  white-space: nowrap; */
   color: white;
+} /*
+nav::after {
+  content: "";
+  background: url(http://localhost:8080/Stock%20banner%20bg.jpg);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  opacity: 0.8;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;   
 }
+
 h2 {
   margin: auto;
   width: auto;
   font-size: .5em;
 }
+h3, h4 {
+  font-size: 1.5vw !important;
+  height: 16.66% !important;
+  min-height: 30px;
+  max-height: 150px;
+  white-space: nowrap;
+}
 h3 {
-  margin: 3% auto;
+  margin: 3% auto !important;
+  text-align: left;
+  padding: 0 15% 0 5%;
+  margin: 0 100% 0 0;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 300;
 }
 h4 {
   margin: 2% .5% 2% auto;
   font-size: 1.5em;
+  text-align: right;
+  vertical-align: middle;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 700;
 }
-.ticker-name {
-  font-weight: bold;
-  font-size: 20pt;
-}
-main {
-  height: 100%;
-  width: auto;
-  min-width: 60%;
-  max-width: 80%;
-  margin: 15vh auto auto auto;
-  border: 1pt solid gray;
+h5 {
+  white-space: nowrap;
+  align-self: center;
 }
 form {
-  margin: 2% auto;
-  padding: .5%;
+  padding: 0;
+  margin: 0;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
+  align-content: center;
+  align-items: stretch;
+  height: 3.5vh;
 }
 .results-section {
-  padding: .5% 2%; 
+  padding: 2%;
+}
+div[id^="ticker-"] { 
+  width: auto;
+  margin: 0 .5%;
+  max-width: 33.33%; 
+}
+div[class^="ticker-"] {
+  margin: 0 1%;
+  color: black;
+  background-color: white;
+  box-shadow: 0 0 16px 0 rgb(185, 185, 185);
+  border: 1px solid hsla( 0 , 0% , 100% , 0 );
 }
 .text-end {
   text-align: end;
@@ -269,8 +136,25 @@ form {
 .news-Header{
   font-size: 1.5em;
 }
-
-
+a:link, a:visited {
+  text-decoration: none;  
+}
+a:hover {
+  text
+}
+a h3 {
+  padding-left: .5% !important;
+  font-size: .9em !important;
+}
+.tickerSearch {
+  max-width: 100px;
+  width: 100%;
+  margin: 0 .5%;
+}
+button {
+  margin: 0 1% 0 .5%;
+  font-size: .8em;
+} */ 
 
 
 .ui-autocomplete {
@@ -279,10 +163,10 @@ form {
   left: 0;
   z-index: 1000;
   display: none;
-  min-width: 60px;
+  /* min-width: 60px;
   width: 60px;
   padding: 4px 0 0 10px;
-  margin: 2px 0 0 0;
+  margin: 2px 0 0 0; */
   list-style: none;
   background-color: #ffffff;
   border-color: #ccc;
@@ -316,11 +200,11 @@ form {
 .ui-helper-hidden-accessible {
   display: none;
 }
-@media only screen and (max-width: 600px) {
+/* @media only screen and (max-width: 600px) {
   form.row {
     max-width: 378px;
   }
-  main {
+  main, nav {
     min-width: 320px;
     width: auto;
   }
@@ -332,13 +216,14 @@ form {
     white-space: pre-wrap;
   }
 }
-@media only screen and (max-width: 400px) {
+@media only screen and (max-width: 500px) {
   h1 {
     font-size: 1.3em;
   }
-  .ui-dialog-title{
+.ui-dialog-title{
     font-size: 10px;
     white-space: pre-wrap;
-  }
+ main {
+    margin-top: 7.5vh;  }
 } */
 
