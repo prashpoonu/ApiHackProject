@@ -1,47 +1,43 @@
 * {
   box-sizing: border-box;
   font-family: 'Source Sans Pro', 'Raleway', sans-serif;
+} 
+html, body {
   margin: 0;
   padding: 0;
-} 
+}
 body {
   width: 100%;
+  min-width: 500px;
 }
 .row, .col {
   display: flex;
-  width: 100%;
 }
 .col {
   flex-direction: column;
 }
 nav {
-  position: fixed;
   top: 0;
   z-index: 999; 
-  justify-content: center;
   align-items: center;
-  /* width: 100%;
-  height: auto; */
-  /* align-items: center;
-  justify-content: center; */
+  justify-content: center;
   box-shadow: 1px 3px 7px rgba(0,0,0,.16);
-  /* background-image: url("http://localhost:8080/Stock%20banner%20bg.jpg");  */
-}
-nav img {
-  position: fixed;
-  /* top: 0;
-  left: 0; */
-  width: 100%;
-  height: 80px;
-  z-index: -1;
+  background-image: url(http://localhost:8080/Stock%20banner%20bg.jpg);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  height: 7vh;
+  min-height: 80px;
+  width: auto;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 main {
-  margin-top: 100px;
-  /* width: 75%;
-  padding: .5%;
-  margin: 2vh auto auto; */
+  margin: 7vh auto 0 auto;
   border: 1pt solid gray;
-  /* font-size: 2.5vw !important; */
+  max-width: 1000px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 #refresh-button {
   border: none;
@@ -50,27 +46,39 @@ main {
   width: 45px;
   margin-right: 5px; 
 }
-h1 {
-  /* width: auto;
-  margin-left: 2%;
-  font-size: 2.1em;
-  white-space: nowrap; */
-  color: white;
-} /*
-nav::after {
-  content: "";
-  background: url(http://localhost:8080/Stock%20banner%20bg.jpg);
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  opacity: 0.8;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  position: absolute;
-  z-index: -1;   
+h1, h2 {
+  margin: 0 5px;
 }
-
+h1 {
+  color: white;
+  /* need more here */
+}
+.submitBtn, .dataDuration, .tickerSearch {
+  background-color: rgba(0, 97, 121, 0.438);
+  color: rgb(78, 78, 78);
+  text-decoration: none;
+  border-radius: 12px;
+  padding: 4px;
+  height: 30px;
+}
+.submitBtn {
+  border: none;
+  box-shadow: 1px 3px 7px rgba(0,0,0,.16);
+  margin: 4px 2px;
+  cursor: pointer;
+}
+.dataDuration {
+  border: 1px transparent grey;  
+}
+.tickerSearch {
+  border: none;
+}
+form {
+  margin-top: 20px;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+/*
 h2 {
   margin: auto;
   width: auto;
