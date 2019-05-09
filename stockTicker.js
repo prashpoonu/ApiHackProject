@@ -58,6 +58,7 @@ function startTicking() {
     $('#stock-details').on('click', 'h3', function(event) {
  
         //event.preventDefault();
+        $('#news-result').html('');//clear the news section
         console.log(`Currently clicked ticker is : ${$(this).text()}`);
         let currentTicker = $(this).text();
         getGraphDataFromUnibitApi(currentTicker);
@@ -175,18 +176,20 @@ function displayNews(tickerName) {
                 let newsData = jsonData.body["latest stock news"];
                 let cntNewsData = newsData.length;
                 let newsDataView =
-                    `<table id="tblNewsView">
+                    `<table id="tblNewsView" class="layout display responsive-table">
+                    <caption>Latest News Of ${tickerName} Stock</caption>
+                    <thead>
                 <tr>
                 <th> Title </th>
                 <th> Publish Date </th>
                 </tr>
+                </thead>
                 </table>`;
                 $('#news-result').html('');
-                $('#news-result').append(`<span class="news-header">Latest News Of Selected Stock</span><hr><br/>`);
                 $('#news-result').append(newsDataView);
                 for (let i = 0; i < cntNewsData; i++) {
-                    $('#tblNewsView').append(`<tr><td>${newsData[i].title}</td>
-                <td>${newsData[i]["published at"].replace('Z', '').replace('T', ' ')}</td>
+                    $('#tblNewsView').append(`<tr><td class="news-title">${newsData[i].title}</td>
+                <td class = "news-date">${newsData[i]["published at"].replace('Z', '').replace('T', ' ')}</td>
                 </tr>`);
                 }
             }
