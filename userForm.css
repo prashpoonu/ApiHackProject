@@ -1,4 +1,193 @@
-* {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* * {
   box-sizing: border-box;
 }
 html, body {
@@ -89,7 +278,6 @@ form {
   top: 100%;
   left: 0;
   z-index: 1000;
-  /*float: left;*/
   display: none;
   min-width: 60px;
   width: 60px;
@@ -115,7 +303,6 @@ form {
 }
 .ui-menu .ui-state-focus,
 .ui-menu .ui-state-active {
-  /*margin: -1px;*/
   background-color: lightgray;
   padding-left: 0px !important;
 }
@@ -153,5 +340,5 @@ form {
     font-size: 10px;
     white-space: pre-wrap;
   }
-}
+} */
 
