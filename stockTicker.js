@@ -254,7 +254,7 @@ $(window).resize(function () {
 
     $("#result-modal").dialog("option", "width", $(window).width() * 0.85);
     $("#result-modal").dialog("option", "height", $(window).height() * 0.85);
-    //$("#result-modal").dialog("option", "position", "center");
+    $("#result-modal").dialog("option", "position", "center");
 
 });
 
